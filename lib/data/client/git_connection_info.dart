@@ -1,5 +1,5 @@
 
-import 'package:git_commit_history/core/environments/Environments.dart';
+import 'package:git_commit_history/core/environments/environments.dart';
 
 class GitConnectionInfo {
   final EnvironmentInfo environmentInfo;

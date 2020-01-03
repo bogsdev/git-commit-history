@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:git_commit_history/presentation/home.dart';
 
-import 'core/environments/Environments.dart';
+import 'core/environments/environments.dart';
+import 'core/environments/not_safe_token_reader.dart';
 import 'core/loader/factory_helper.dart';
 
 void main() async{
   //Define environment
-  EnvironmentInfo environmentInfo = EnvironmentInfo(
-    env: Environments.dev,
-    repository: my_repository,
-    user: my_user,
-    token: my_token
-  );
+  var environmentInfo = await loadEnvironmentInfo();
   await initializeFactory(environmentInfo);
   runApp(MyApp());
 }
+
+Future<EnvironmentInfo> loadEnvironmentInfo() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  //GIT read only public access token work around
+  NotSafeTokenReader reader = NotSafeTokenReader();
+  String myToken = await reader.read();
+  //Define environment
+  return  EnvironmentInfo(
+      env: Environments.dev,
+      repository: my_repository,
+      user: my_user,
+      token: myToken
+  );
+}
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

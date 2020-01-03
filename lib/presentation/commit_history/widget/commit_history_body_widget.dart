@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
+import 'package:git_commit_history/core/encryption/encryption_util.dart';
 import 'package:git_commit_history/core/loader/factory.dart';
 import 'package:git_commit_history/domain/entities/commit.dart';
 import 'package:git_commit_history/presentation/commit_history/bloc/commit_history_bloc.dart';
@@ -65,9 +67,7 @@ class _CommitHistoryPageState extends State<CommitHistoryPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Container(
-          child: Icon(Icons.refresh),
-        ),
+        child: Container(child: Icon(Icons.refresh)),
         onPressed: () => _bloc.add(LoadAllCommitHistoryEvent()),
       ),
     );
