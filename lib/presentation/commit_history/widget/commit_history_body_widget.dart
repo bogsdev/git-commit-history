@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_string_encryption/flutter_string_encryption.dart';
-import 'package:git_commit_history/core/encryption/encryption_util.dart';
 import 'package:git_commit_history/core/loader/factory.dart';
-import 'package:git_commit_history/domain/entities/commit.dart';
 import 'package:git_commit_history/presentation/commit_history/bloc/commit_history_bloc.dart';
 import 'package:git_commit_history/presentation/commit_history/bloc/commit_history_event.dart';
 import 'package:git_commit_history/presentation/commit_history/bloc/commit_history_state.dart';
@@ -13,7 +10,6 @@ import 'package:git_commit_history/presentation/commit_history/widget/commit_his
 
 import 'commit_history_empty_commits_widget.dart';
 import 'commit_history_error_widget.dart';
-import 'commit_history_item_widget.dart';
 
 class CommitHistoryPage extends StatefulWidget {
   CommitHistoryPage();

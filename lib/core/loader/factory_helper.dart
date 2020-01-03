@@ -1,6 +1,5 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 import 'package:git_commit_history/core/encryption/encryption_util.dart';
 import 'package:git_commit_history/core/environments/environments.dart';
 import 'package:git_commit_history/core/reader/asset_reader.dart';
@@ -26,7 +25,6 @@ Future<void> initializeFactory(EnvironmentInfo env) async {
   i.registerLazySingleton<GitConnectionInfo>(() => GitConnectionInfo(i()));
   i.registerLazySingleton<MyGitClientHeaders>(() => MyGitClientHeaders(i()));
   i.registerLazySingleton<CommitHistoryLabels>(() => CommitHistoryLabels());
-  i.registerLazySingleton<PlatformStringCryptor>(() => PlatformStringCryptor());
   i.registerLazySingleton<NotSoSafeDecryptionUtil>(() => NotSoSafeDecryptionUtil());
   i.registerLazySingleton<AssetReader>(() => AssetReader());
   i.registerLazySingleton(() => http.Client());
