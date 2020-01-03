@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //read only on public repository token
-const String my_token = 'd6bbf5144cc7fa4a1e527a363a754d98210b4116';
+const String my_token = '29278978356931c488acde6c7a0519fab5262ee4';
 const String my_user = 'bogsdev';
 const String my_repository = 'git-commit-history';
 

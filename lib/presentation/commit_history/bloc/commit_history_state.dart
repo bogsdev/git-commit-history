@@ -23,7 +23,6 @@ class LoadedCommitHistoryState extends CommitHistoryState {
 }
 
 class LoadedEmptyCommitHistoryState extends CommitHistoryState {
-  LoadedEmptyCommitHistoryState();
   @override
   List<Object> get props => [];
 }
