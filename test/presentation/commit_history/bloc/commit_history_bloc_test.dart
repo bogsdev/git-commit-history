@@ -96,7 +96,8 @@ main() {
     'test happy path - general error',
     build: () {
       when(mockCommitHistoryLoader.load()).thenAnswer((_) async =>
-          CommitHistoryLoaderResult(errorMessage: expectedMessages.general));
+          CommitHistoryLoaderResult(
+              errorMessage: expectedMessages.fetchFailed));
       return CommitHistoryBloc(
           loader: mockCommitHistoryLoader, uiErrorMessages: uiErrorMessages);
     },
@@ -104,7 +105,7 @@ main() {
     expect: [
       InitialCommitHistoryState(),
       LoadingCommitHistoryState(),
-      ErrorCommitHistoryState(expectedMessages.general)
+      ErrorCommitHistoryState(expectedMessages.fetchFailed)
     ],
   );
 

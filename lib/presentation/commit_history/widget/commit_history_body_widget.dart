@@ -24,7 +24,7 @@ class _CommitHistoryPageState extends State<CommitHistoryPage> {
   @override
   void initState() {
     super.initState();
-    _bloc = Factory.get<CommitHistoryBloc>();
+    _bloc = Factory.get();
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _bloc.add(LoadAllCommitHistoryEvent()));
   }

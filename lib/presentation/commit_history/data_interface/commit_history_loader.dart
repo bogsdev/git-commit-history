@@ -7,6 +7,8 @@ import 'package:git_commit_history/domain/errors/commit_history/commit_history_c
 import 'package:git_commit_history/domain/errors/commit_history/commit_history_errors.dart';
 import 'dart:async';
 
+import 'package:git_commit_history/presentation/data_interface/data_loader.dart';
+
 class CommitHistoryLoaderResult {
   final List<Commit> commits;
   final String errorMessage;
@@ -16,7 +18,7 @@ class CommitHistoryLoaderResult {
   bool get success => errorMessage == null;
 }
 
-class CommitHistoryLoader {
+class CommitHistoryLoader extends DataLoader<CommitHistoryLoaderResult> {
   final CommitHistoryRepository repository;
   final CommitHistoryErrorMessages messages;
 
@@ -32,14 +34,14 @@ class CommitHistoryLoader {
     } on CommitHistoryTimeoutError catch (e) {
       errorMessage = messages.timeOut;
     } on CommitHistoryConversionError catch (e) {
-      errorMessage = messages.general;
+      errorMessage = messages.fetchFailed;
     } on CommitHistoryAuthenticationError catch (e) {
-      errorMessage = messages.general;
+      errorMessage = messages.fetchFailed;
     } on CommitHistoryFailed catch (e) {
-      errorMessage = messages.general;
+      errorMessage = messages.fetchFailed;
     } on CommitHistoryUnknownError catch (e) {
       //TODO: Add further handling
-      errorMessage = messages.general;
+      errorMessage = messages.fetchFailed;
     }
     return CommitHistoryLoaderResult(errorMessage: errorMessage);
   }

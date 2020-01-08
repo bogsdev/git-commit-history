@@ -93,24 +93,24 @@ main() {
         .thenThrow(CommitHistoryConversionError());
     CommitHistoryLoaderResult result = await loader.load();
     expect(result.success, false);
-    expect(result.errorMessage, messages.general);
+    expect(result.errorMessage, messages.fetchFailed);
 
     when(mockCommitHistoryRepository.all())
         .thenThrow(CommitHistoryAuthenticationError());
     result = await loader.load();
     expect(result.success, false);
-    expect(result.errorMessage, messages.general);
+    expect(result.errorMessage, messages.fetchFailed);
 
     when(mockCommitHistoryRepository.all()).thenThrow(CommitHistoryFailed());
     result = await loader.load();
     expect(result.success, false);
-    expect(result.errorMessage, messages.general);
+    expect(result.errorMessage, messages.fetchFailed);
 
     when(mockCommitHistoryRepository.all())
         .thenThrow(CommitHistoryUnknownError());
     result = await loader.load();
     expect(result.success, false);
-    expect(result.errorMessage, messages.general);
+    expect(result.errorMessage, messages.fetchFailed);
   });
 
   test('test load negative test', () async {

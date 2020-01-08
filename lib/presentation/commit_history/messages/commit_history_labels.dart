@@ -1,4 +1,4 @@
-class CommitHistoryLabels{
+class CommitHistoryLabels {
   String title = 'Git Commits';
   String loading = 'Loading';
   String error = 'Error';

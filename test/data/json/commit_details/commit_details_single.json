@@ -1,0 +1,18 @@
+
+  {
+    "sha": "12345",
+    "commit": {
+      "author": {
+        "name": "me",
+        "date": "2020-01-03T03:12:54Z"
+      },
+      "message": "test commit"
+    },
+    "files": [
+      {
+        "filename": "File.txt",
+        "changes": 8,
+        "status": "modified"
+      }
+    ]
+  }

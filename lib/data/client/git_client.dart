@@ -24,6 +24,13 @@ class GitClient {
             headers: header.withAuthorization)
         .timeout(timeout);
   }
+
+  Future<Response> getCommit(String sha) async {
+    return await client
+        .get('${connectionInfo.myRepositoryCommitsPath}/$sha',
+            headers: header.withAuthorization)
+        .timeout(timeout);
+  }
 }
 
 class MyGitClientHeaders {
