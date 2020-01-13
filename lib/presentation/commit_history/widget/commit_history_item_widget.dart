@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:git_commit_history/core/loader/factory.dart';
 import 'package:git_commit_history/domain/entities/commit.dart';
 import 'package:git_commit_history/presentation/navigation/navigation.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:git_commit_history/presentation/transformers/date_transformer.dart';
 
 class CommitHistoryItemWidget extends StatelessWidget {
   final Commit commit;
@@ -33,7 +33,9 @@ class CommitHistoryItemWidget extends StatelessWidget {
                               children: <Widget>[
                                 Container(
                                     child: Text(
-                                  timeago.format(commit.timestamp),
+                                      Factory.get<DateTransformer>()
+                                          .transformDaysAgoOrDate(
+                                          DateTime.now(), commit.timestamp),
                                   style: Theme.of(context).textTheme.caption,
                                 )),
                                 Expanded(

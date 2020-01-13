@@ -4,6 +4,7 @@ import 'package:git_commit_history/core/encryption/encryption_util.dart';
 import 'package:git_commit_history/core/environments/environments.dart';
 import 'package:git_commit_history/core/reader/asset_reader.dart';
 import 'package:git_commit_history/data/client/git_client.dart';
+import 'package:git_commit_history/data/client/git_client_service.dart';
 import 'package:git_commit_history/data/client/git_connection_info.dart';
 import 'package:git_commit_history/data/converters/commit_details/commit_details_converter.dart';
 import 'package:git_commit_history/data/converters/commit_history/commit_history_converter.dart';
@@ -24,6 +25,7 @@ import 'package:git_commit_history/presentation/commit_history/messages/commit_h
 import 'package:git_commit_history/presentation/errors/ui_error_messages.dart';
 import 'package:git_commit_history/presentation/navigation/navigation.dart';
 import 'package:git_commit_history/presentation/navigation/navigation_routes.dart';
+import 'package:git_commit_history/presentation/transformers/date_transformer.dart';
 import 'package:git_commit_history/utils/connection.dart';
 import 'package:http/http.dart' as http;
 import 'factory.dart';
@@ -61,14 +63,17 @@ Future<void> initializeFactory(EnvironmentInfo env) async {
       () => InternetConnectionUtils(connectivity: i(), connectionChecker: i()));
   i.registerLazySingleton<GitClient>(
       () => GitClient(connectionInfo: i(), client: i(), header: i()));
+  i.registerLazySingleton<GitClientService>(
+          () => GitClientService.create(i()));
   i.registerLazySingleton<CommitHistoryRepository>(() =>
       CommitHistoryRepositoryImpl(
-          client: i(), converter: i(), networkConnection: i()));
+          service: i(), converter: i(), networkConnection: i()));
   i.registerLazySingleton<CommitDetailsRepository>(() =>
       CommitDetailsRepositoryImpl(
-          client: i(), converter: i(), networkConnection: i()));
+          service: i(), converter: i(), networkConnection: i()));
   i.registerFactory<CommitHistoryBloc>(
       () => CommitHistoryBloc(uiErrorMessages: i(), loader: i()));
   i.registerFactory<CommitDetailsBloc>(
       () => CommitDetailsBloc(uiErrorMessages: i(), loader: i()));
+  i.registerLazySingleton<DateTransformer>(() => DateTransformer());
 }

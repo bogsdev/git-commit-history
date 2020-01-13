@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:git_commit_history/data/client/git_client_service.dart';
 import 'package:git_commit_history/domain/converters/commit_details/commit_details_converter.dart';
 import 'package:git_commit_history/domain/entities/commit_details.dart';
 import 'package:git_commit_history/domain/errors/commit_details/commit_details_errors.dart';
@@ -10,16 +12,16 @@ import '../../core/errors/connection_errors/connection_errors.dart';
 import '../../utils/connection.dart';
 import '../client/git_client.dart';
 
-import 'package:http/http.dart';
 
 class CommitDetailsRepositoryImpl extends CommitDetailsRepository {
   final NetworkConnection networkConnection;
-  final GitClient client;
+  final GitClientService service;
   final CommitDetailsConverter converter;
+
 
   CommitDetailsRepositoryImpl(
       {@required this.networkConnection,
-      @required this.client,
+      @required this.service,
       @required this.converter});
 
   /// returns details of a commit
@@ -34,7 +36,7 @@ class CommitDetailsRepositoryImpl extends CommitDetailsRepository {
     try {
       bool connected = await networkConnection.isConnected;
       if (!connected) throw NoInternetConnectionError();
-      Response response = await client.getCommit(sha);
+      Response response = await service.getCommit(sha).timeout(timeout);
       if (response.statusCode == SUCCESS_STATUS_CODE) {
         return converter.convert(response.body);
       } else if (response.statusCode == NOT_FOUND_STATUS_CODE ||

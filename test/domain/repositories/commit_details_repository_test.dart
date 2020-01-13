@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:chopper/chopper.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:git_commit_history/core/errors/connection_errors/connection_errors.dart';
 import 'package:git_commit_history/data/client/git_client.dart';
+import 'package:git_commit_history/data/client/git_client_service.dart';
 import 'package:git_commit_history/data/converters/commit_details/commit_details_converter.dart';
 import 'package:git_commit_history/data/converters/commit_history/commit_history_converter.dart';
 import 'package:git_commit_history/data/repositories/commit_details_repository.dart';
@@ -13,11 +15,9 @@ import 'package:git_commit_history/domain/converters/commit_details/commit_detai
 import 'package:git_commit_history/domain/entities/commit.dart';
 import 'package:git_commit_history/domain/entities/commit_details.dart';
 import 'package:git_commit_history/domain/errors/commit_details/commit_details_errors.dart';
-import 'package:git_commit_history/domain/errors/commit_history/commit_history_errors.dart';
 import 'package:git_commit_history/domain/repositories/commit_details_repository.dart';
-import 'package:git_commit_history/domain/repositories/commit_history_repository.dart';
 import 'package:git_commit_history/utils/connection.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
 
 import '../../data/reader.dart';
@@ -26,19 +26,19 @@ class MockDataConnectionChecker extends Mock implements DataConnectionChecker {}
 
 class MockConnectivity extends Mock implements Connectivity {}
 
-class MockGitClient extends Mock implements GitClient {}
+class MockGitClient extends Mock implements GitClientService {}
 
 main() {
   Reader reader = Reader();
   DataConnectionChecker mockDataConnectionChecker = MockDataConnectionChecker();
   Connectivity mockConnectivity = MockConnectivity();
-  GitClient gitClient = MockGitClient();
+  GitClientService gitClient = MockGitClient();
   NetworkConnection networkConnection = InternetConnectionUtils(
       connectionChecker: mockDataConnectionChecker,
       connectivity: mockConnectivity);
   CommitDetailsRepository commitDetailsRepository = CommitDetailsRepositoryImpl(
       networkConnection: networkConnection,
-      client: gitClient,
+      service: gitClient,
       converter: CommitDetailsConverterImpl());
 
   String input = 'sha';
@@ -47,8 +47,9 @@ main() {
     when(mockConnectivity.checkConnectivity())
         .thenAnswer((_) async => ConnectivityResult.mobile);
     when(mockDataConnectionChecker.hasConnection).thenAnswer((_) async => true);
-    when(gitClient.getCommit(input)).thenAnswer((_) => Future.value(Response(
-        reader.data('commit_details/commit_details_single.json'), 200)));
+    String data = reader.data('commit_details/commit_details_single.json');
+    when(gitClient.getCommit(input)).thenAnswer(
+        (_) => Future.value(Response(http.Response(data, 200), data)));
     CommitDetails commitDetails = await commitDetailsRepository.get(input);
     expect(commitDetails != null, true);
     Commit commit = commitDetails.commit;
@@ -68,8 +69,8 @@ main() {
     when(mockConnectivity.checkConnectivity())
         .thenAnswer((_) async => ConnectivityResult.none);
     when(mockDataConnectionChecker.hasConnection).thenAnswer((_) async => true);
-    when(gitClient.getCommit(input))
-        .thenAnswer((_) => Future.value(Response("{}", 200)));
+    when(gitClient.getCommit(input)).thenAnswer(
+        (_) => Future.value(Response(http.Response("{}", 200), '{}')));
     var exception;
     try {
       CommitDetails commitDetails = await commitDetailsRepository.get(input);
@@ -84,8 +85,8 @@ main() {
         .thenAnswer((_) async => ConnectivityResult.mobile);
     when(mockDataConnectionChecker.hasConnection)
         .thenAnswer((_) async => false);
-    when(gitClient.getCommit(input))
-        .thenAnswer((_) => Future.value(Response("{}", 200)));
+    when(gitClient.getCommit(input)).thenAnswer(
+        (_) => Future.value(Response(http.Response("{}", 200), '{}')));
     var exception;
     try {
       CommitDetails commitDetails = await commitDetailsRepository.get(input);
@@ -113,8 +114,8 @@ main() {
     when(mockConnectivity.checkConnectivity())
         .thenAnswer((_) async => ConnectivityResult.mobile);
     when(mockDataConnectionChecker.hasConnection).thenAnswer((_) async => true);
-    when(gitClient.getCommit(input))
-        .thenAnswer((_) => Future.value(Response("{}", 404)));
+    when(gitClient.getCommit(input)).thenAnswer(
+        (_) => Future.value(Response(http.Response("{}", 404), '{}')));
     var exception;
     try {
       CommitDetails commitDetails = await commitDetailsRepository.get(input);
@@ -128,8 +129,8 @@ main() {
     when(mockConnectivity.checkConnectivity())
         .thenAnswer((_) async => ConnectivityResult.mobile);
     when(mockDataConnectionChecker.hasConnection).thenAnswer((_) async => true);
-    when(gitClient.getCommit(input))
-        .thenAnswer((_) => Future.value(Response("{}", 403)));
+    when(gitClient.getCommit(input)).thenAnswer(
+        (_) => Future.value(Response(http.Response("{}", 403), '{}')));
     var exception;
     try {
       CommitDetails commitDetails = await commitDetailsRepository.get(input);
@@ -143,8 +144,8 @@ main() {
     when(mockConnectivity.checkConnectivity())
         .thenAnswer((_) async => ConnectivityResult.mobile);
     when(mockDataConnectionChecker.hasConnection).thenAnswer((_) async => true);
-    when(gitClient.getCommit(input))
-        .thenAnswer((_) => Future.value(Response("{}", 500)));
+    when(gitClient.getCommit(input)).thenAnswer(
+        (_) => Future.value(Response(http.Response("{}", 500), '{}')));
     var exception;
     try {
       CommitDetails commitDetails = await commitDetailsRepository.get(input);

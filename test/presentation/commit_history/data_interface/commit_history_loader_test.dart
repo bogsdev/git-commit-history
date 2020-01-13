@@ -106,8 +106,8 @@ main() {
     expect(result.success, false);
     expect(result.errorMessage, messages.fetchFailed);
 
-    when(mockCommitHistoryRepository.all())
-        .thenThrow(CommitHistoryUnknownError());
+    when(mockCommitHistoryRepository.all()).thenThrow(
+        CommitHistoryUnknownError(exception: null, stackTrace: null));
     result = await loader.load();
     expect(result.success, false);
     expect(result.errorMessage, messages.fetchFailed);
